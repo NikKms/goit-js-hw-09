@@ -63,7 +63,7 @@ function updateTimer(remainingTime) {
 
   [...refs.timerElements].forEach(el => {
     if (el.hasAttribute('data-days')) {
-      el.textContent = pad(days);
+      el.textContent = days;
     } else if (el.hasAttribute('data-hours')) {
       el.textContent = pad(hours);
     } else if (el.hasAttribute('data-minutes')) {
