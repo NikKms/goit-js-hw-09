@@ -7,11 +7,9 @@ const refs = {
   timerElements: document.querySelectorAll('.value'),
 };
 
-refs.startButton.addEventListener('click', startTimer);
+refs.startButton.disabled = true;
 
-const {
-  Notify: { failure },
-} = Notiflix;
+refs.startButton.addEventListener('click', startTimer);
 
 let selectedDateTime = null;
 let timerIsRunning = false;
@@ -21,12 +19,16 @@ const options = {
   time_24hr: true,
   defaultDate: Date.now(),
   minuteIncrement: 1,
+  onOpen([selectedDates]) {
+    Notiflix.Notify.warning('Выберите дату и время в будущем');
+  },
   onClose([selectedDates]) {
     console.log(selectedDates);
-    if (selectedDates < Date.now()) {
-      failure('Please choose a date in the future');
+    if (!selectedDates || selectedDates <= Date.now()) {
+      Notiflix.Notify.failure('Отклонено, старт отложен, не корректная дата!');
       refs.startButton.disabled = true;
     } else {
+      Notiflix.Notify.success('Все ОК, нажми старт =)');
       refs.startButton.disabled = false;
       selectedDateTime = selectedDates;
     }
@@ -42,28 +44,33 @@ function startTimer() {
 
   const currentDate = Date.now();
   let remainingTime = selectedDateTime ? selectedDateTime - currentDate : 0;
+  Notiflix.Loading.pulse();
 
-  const intervalId = setInterval(() => {
-    if (remainingTime <= 0) {
-      clearInterval(intervalId);
-      timerIsRunning = false;
-      return;
-    }
+  const animationTime = 2000;
+  setTimeout(() => {
+    Notiflix.Loading.remove();
+    const intervalId = setInterval(() => {
+      if (remainingTime <= 0) {
+        clearInterval(intervalId);
+        timerIsRunning = false;
+        return;
+      }
 
-    updateTimer(remainingTime);
-    remainingTime -= 1000;
-  }, 1000);
+      updateTimer(remainingTime);
+      remainingTime -= 1000;
+    }, 1000);
 
-  timerIsRunning = true;
+    timerIsRunning = true;
+  }, animationTime);
 }
 
 function updateTimer(remainingTime) {
-  console.log(remainingTime);
   const { days, hours, minutes, seconds } = convertMs(remainingTime);
+  console.log(remainingTime);
 
   [...refs.timerElements].forEach(el => {
     if (el.hasAttribute('data-days')) {
-      el.textContent = days;
+      el.textContent = pad(days);
     } else if (el.hasAttribute('data-hours')) {
       el.textContent = pad(hours);
     } else if (el.hasAttribute('data-minutes')) {
