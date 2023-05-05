@@ -1,0 +1,2 @@
+.timer{justify-content:center;align-items:center;margin-top:30px;display:flex}.field{flex-direction:column;align-items:center;margin:0 10px;font-size:24px;display:flex}.value{color:#fff;background-color:#333;border-radius:10px;padding:10px 20px;font-size:42px;font-weight:700;animation:scale-in .5s cubic-bezier(.25,.46,.45,.94) both}.label{margin-top:10px;font-size:16px}@keyframes scale-in{0%{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
+/*# sourceMappingURL=02-timer.5f69ea88.css.map */
