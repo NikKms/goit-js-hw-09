@@ -6,6 +6,7 @@ const refs = {
 refs.startBtn.addEventListener('click', startColorChange);
 refs.stopBtn.addEventListener('click', stopColorChange);
 
+refs.stopBtn.disabled = true;
 let intervalID = null;
 
 function startColorChange() {
