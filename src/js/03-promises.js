@@ -21,23 +21,26 @@ function handleSubmit(e) {
     promise
       .then(() => {
         Notiflix.Notify.success(
-          `✅ Fulfilled promise ${position + 1} in ${promise.delay}ms`
+          `✅ Fulfilled promise ${position + 1} in ${Number(delay.value)}ms`
         );
       })
       .catch(() => {
         Notiflix.Notify.failure(
-          `❌ Rejected promise ${position + 1} in ${promise.delay}ms`
+          `❌ Rejected promise ${position + 1} in ${Number(delay.value)}ms`
         );
       });
   });
 }
 
-const createPromise = delay =>
+const createPromise = promiseDelay =>
   new Promise((resolve, reject) => {
     const shouldResolve = Math.random() > 0.3;
     setTimeout(
-      () => (shouldResolve ? resolve({ delay }) : reject({ delay })),
-      delay
+      () =>
+        shouldResolve
+          ? resolve({ delay: promiseDelay })
+          : reject({ delay: promiseDelay }),
+      promiseDelay
     );
   });
 
