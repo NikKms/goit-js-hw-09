@@ -4,6 +4,8 @@ const refs = {
   form: document.querySelector('form'),
 };
 
+let promises = [];
+
 refs.form.addEventListener('submit', handleSubmit);
 
 function handleSubmit(e) {
@@ -11,22 +13,23 @@ function handleSubmit(e) {
 
   const { delay, step, amount } = e.target.elements;
 
-  const promises = generatePromises(
+  promises = generatePromises(
     Number(delay.value),
     Number(step.value),
     Number(amount.value)
   );
 
-  [...promises].forEach((promise, position) => {
+  promises.forEach((promise, position) => {
+    const promiseDelay = Number(delay.value) + position * Number(step.value);
     promise
       .then(() => {
         Notiflix.Notify.success(
-          `✅ Fulfilled promise ${position + 1} in ${Number(delay.value)}ms`
+          `✅ Fulfilled promise ${position + 1} in ${promiseDelay}ms`
         );
       })
       .catch(() => {
         Notiflix.Notify.failure(
-          `❌ Rejected promise ${position + 1} in ${Number(delay.value)}ms`
+          `❌ Rejected promise ${position + 1} in ${promiseDelay}ms`
         );
       });
   });
